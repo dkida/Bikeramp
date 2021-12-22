@@ -5,10 +5,10 @@ export class Trip {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ type: 'float' })
   distance: number;
 
-  @Column()
+  @Column({ type: 'float' })
   price: number;
 
   @Column()
