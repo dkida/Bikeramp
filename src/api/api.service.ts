@@ -28,7 +28,6 @@ export class ApiService {
       date: this.createDate.createDate(),
     };
 
-    console.log(trip);
     this.trips.push(trip);
     return trip;
   }
