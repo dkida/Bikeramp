@@ -5,10 +5,10 @@ import { AxiosResponse } from 'axios';
 import { lastValueFrom } from 'rxjs';
 
 @Injectable()
-export class CalculateCoords {
+export class CalculateDistance {
   constructor(private httpService: HttpService) {}
 
-  async calculateCoords(
+  async calculateDistance(
     start_address: string,
     destination_address: string,
   ): Promise<number> {
