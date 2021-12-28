@@ -20,4 +20,13 @@ export class TripsRepository extends Repository<Trip> {
     await this.save(trip);
     return trip;
   }
+
+  async getWeeklyStats(dateWeekAgo: string): Promise<Trip[]> {
+    const query = this.createQueryBuilder('trip').where('trip.date = :date', {
+      date: dateWeekAgo,
+    });
+
+    const trips = await query.getMany();
+    return trips;
+  }
 }

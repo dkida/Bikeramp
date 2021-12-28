@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CalculateDistance } from './calculateDistance.service';
+import { CalculateDistance } from 'src/utils/calculateDistance';
 import { CreateDate } from './createDate.service';
 import { CreateTripDto } from './dto/create-trip.dto';
 import { Trip } from './trip.entity';
