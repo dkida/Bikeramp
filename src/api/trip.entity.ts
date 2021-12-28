@@ -12,5 +12,5 @@ export class Trip {
   price: number;
 
   @Column()
-  date: string;
+  date: Date;
 }

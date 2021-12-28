@@ -7,7 +7,7 @@ export class TripsRepository extends Repository<Trip> {
   async createTrip(
     createTripDto: CreateTripDto,
     distance: number,
-    date: string,
+    date: Date,
   ): Promise<Trip> {
     const { price } = createTripDto;
 
