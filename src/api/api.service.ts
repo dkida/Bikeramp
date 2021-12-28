@@ -23,4 +23,20 @@ export class ApiService {
 
     return this.tripRepository.createTrip(CreateTripDto, distance, date);
   }
+
+  async getWeeklyStats() {
+    const weeklyTripsObject = this.tripRepository.getWeeklyStats();
+    let totalDistance = 0;
+    let totalPrice = 0;
+
+    (await weeklyTripsObject).forEach((trip) => {
+      totalDistance += trip.distance;
+      totalPrice += trip.price;
+    });
+
+    return {
+      total_distance: totalDistance.toString() + 'km',
+      total_price: totalPrice.toString() + 'PLN',
+    };
+  }
 }

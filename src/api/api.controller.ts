@@ -14,10 +14,10 @@ export class ApiController {
 
   //TODO
 
-  // @Get('/stats/weekly')
-  // getWeeklyStats() {
-
-  // }
+  @Get('/stats/weekly')
+  getWeeklyStats() {
+    return this.apiService.getWeeklyStats();
+  }
 
   // @Get('stats/monthly')
   // getMonthlyStats() {

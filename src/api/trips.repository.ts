@@ -1,4 +1,4 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Raw, Repository } from 'typeorm';
 import { CreateTripDto } from './dto/create-trip.dto';
 import { Trip } from './trip.entity';
 
@@ -21,12 +21,27 @@ export class TripsRepository extends Repository<Trip> {
     return trip;
   }
 
-  async getWeeklyStats(dateWeekAgo: string): Promise<Trip[]> {
-    const query = this.createQueryBuilder('trip').where('trip.date = :date', {
-      date: dateWeekAgo,
+  private getWeekAgoDate(): String {
+    const weekAgoDate = new Date();
+    weekAgoDate.setDate(weekAgoDate.getDate() - 7);
+    const formattedDate = `${weekAgoDate.getFullYear()}-${
+      weekAgoDate.getMonth() + 1
+    }-${weekAgoDate.getDate()}`;
+
+    return formattedDate;
+  }
+
+  async getWeeklyStats(): Promise<Trip[]> {
+    const currentDate = new Date();
+    const weekAgoDate = this.getWeekAgoDate();
+
+    const query = this.createQueryBuilder('trip');
+    query.where(':currentDate > trip.date AND trip.date > :weekAgoDate', {
+      currentDate: currentDate,
+      weekAgoDate: weekAgoDate,
     });
 
-    const trips = await query.getMany();
-    return trips;
+    const weeklyTrips = await query.getMany();
+    return weeklyTrips;
   }
 }

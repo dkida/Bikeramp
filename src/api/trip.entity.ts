@@ -11,6 +11,6 @@ export class Trip {
   @Column({ type: 'float' })
   price: number;
 
-  @Column()
+  @Column({ type: 'date' })
   date: Date;
 }
