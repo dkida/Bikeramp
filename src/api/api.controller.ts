@@ -12,8 +12,6 @@ export class ApiController {
     return this.apiService.createNewTrip(createTripDto);
   }
 
-  //TODO
-
   @Get('/stats/weekly')
   getWeeklyStats() {
     return this.apiService.getWeeklyStats();

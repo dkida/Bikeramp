@@ -5,6 +5,7 @@ import { Trip } from './trip.entity';
 import { TripsRepository } from './trips.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { weeklyStats } from './trip.model';
+import { monthlyStatsDate } from 'src/utils/dateManipulation';
 
 @Injectable()
 export class ApiService {
@@ -41,21 +42,49 @@ export class ApiService {
     };
   }
 
-  async getMonthlyStats() {
+  async getMonthlyStats(): Promise<Trip[]> {
     const monthlyTripsObject = await this.tripRepository.getMonthlyStats();
-    let monthlyStats = {};
+    let shiftedStats = {};
+    let monthlyStats = [];
+    let dateKeys = [];
 
     let dateOfATrip;
     monthlyTripsObject.forEach((trip) => {
       if (!(dateOfATrip === trip.date)) {
         dateOfATrip = trip.date;
-        monthlyStats[dateOfATrip] = [];
+        dateKeys.push(trip.date);
+        shiftedStats[dateOfATrip] = [];
       }
-      //console.log(dateOfATrip, '==', trip.date);
 
-      monthlyStats[dateOfATrip].push(trip);
+      shiftedStats[dateOfATrip].push(trip);
     });
-    console.log(monthlyStats);
-    return this.tripRepository.getMonthlyStats();
+
+    for (let i = 0; i < dateKeys.length; i++) {
+      let totalDistance = 0;
+      let totalPay = 0;
+      let avgRideLength = 0;
+      let avgPay = 0;
+      shiftedStats[dateKeys[i]].forEach((element) => {
+        totalDistance += element.distance;
+        totalPay += element.price;
+      });
+
+      avgRideLength = Math.round(
+        totalDistance / shiftedStats[dateKeys[i]].length,
+      );
+      avgPay = totalPay / shiftedStats[dateKeys[i]].length;
+      let total_distance = Math.round(totalDistance) + 'km';
+      let avg_price = avgPay.toFixed(2) + 'PLN';
+      let avg_ride = avgRideLength.toString() + 'km';
+      let date = monthlyStatsDate(dateKeys[i]);
+      monthlyStats.push({
+        day: date,
+        total_distance: total_distance,
+        avg_ride: avg_ride,
+        avg_price: avg_price,
+      });
+    }
+
+    return monthlyStats;
   }
 }
