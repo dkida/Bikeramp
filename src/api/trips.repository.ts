@@ -44,4 +44,21 @@ export class TripsRepository extends Repository<Trip> {
     const weeklyTrips = await query.getMany();
     return weeklyTrips;
   }
+
+  async getMonthlyStats(): Promise<Trip[]> {
+    const currentDate = new Date();
+    const lastDayOfTheMonth = `${currentDate.getFullYear()}-${
+      currentDate.getMonth() + 1
+    }-${currentDate.getDate()}`;
+
+    const query = this.createQueryBuilder('trip');
+    query
+      .where(`trip.date >= date_trunc('month', CURRENT_DATE)`)
+      .andWhere(`trip.date <= :lastDayOfTheMonth`, {
+        lastDayOfTheMonth: lastDayOfTheMonth,
+      })
+      .orderBy('trip.date');
+    const monthlyTrips = await query.getMany();
+    return monthlyTrips;
+  }
 }

@@ -4,6 +4,7 @@ import { CreateTripDto } from './dto/create-trip.dto';
 import { Trip } from './trip.entity';
 import { TripsRepository } from './trips.repository';
 import { InjectRepository } from '@nestjs/typeorm';
+import { weeklyStats } from './trip.model';
 
 @Injectable()
 export class ApiService {
@@ -24,7 +25,7 @@ export class ApiService {
     return this.tripRepository.createTrip(CreateTripDto, distance, date);
   }
 
-  async getWeeklyStats() {
+  async getWeeklyStats(): Promise<weeklyStats> {
     const weeklyTripsObject = this.tripRepository.getWeeklyStats();
     let totalDistance = 0;
     let totalPrice = 0;
@@ -38,5 +39,23 @@ export class ApiService {
       total_distance: totalDistance.toString() + 'km',
       total_price: totalPrice.toString() + 'PLN',
     };
+  }
+
+  async getMonthlyStats() {
+    const monthlyTripsObject = await this.tripRepository.getMonthlyStats();
+    let monthlyStats = {};
+
+    let dateOfATrip;
+    monthlyTripsObject.forEach((trip) => {
+      if (!(dateOfATrip === trip.date)) {
+        dateOfATrip = trip.date;
+        monthlyStats[dateOfATrip] = [];
+      }
+      //console.log(dateOfATrip, '==', trip.date);
+
+      monthlyStats[dateOfATrip].push(trip);
+    });
+    console.log(monthlyStats);
+    return this.tripRepository.getMonthlyStats();
   }
 }

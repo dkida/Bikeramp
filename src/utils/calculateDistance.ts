@@ -11,7 +11,7 @@ export class CalculateDistance {
     startAddress: string,
     destinationAddress: string,
   ): Promise<number> {
-    const API_KEY = '';
+    const API_KEY = 'AIzaSyDOeam-slK_8ev-PO39xicM_bFkOSm_Lw0';
     const URL = encodeURI(
       `https://maps.googleapis.com/maps/api/directions/json?origin=${startAddress}&destination=${destinationAddress}&key=${API_KEY}`,
     );

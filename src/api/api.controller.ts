@@ -19,8 +19,8 @@ export class ApiController {
     return this.apiService.getWeeklyStats();
   }
 
-  // @Get('stats/monthly')
-  // getMonthlyStats() {
-
-  // }
+  @Get('stats/monthly')
+  getMonthlyStats() {
+    return this.apiService.getMonthlyStats();
+  }
 }
